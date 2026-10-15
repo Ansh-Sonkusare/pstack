@@ -1,6 +1,6 @@
 # pstack
 
-> this is an unofficial fork of pstack, built for Claude Code and actively maintained. the original is [Lauren Tan](https://x.com/poteto)'s Cursor plugin. [ported from cursor](#ported-from-cursor) lists what moved, and [contributing](#contributing) says where to file issues and pull requests.
+> **pstack for Claude Code, synced to the latest upstream.** this is an unofficial Claude Code port of [Lauren Tan](https://x.com/poteto)'s pstack, maintained by [@Ansh-Sonkusare](https://github.com/Ansh-Sonkusare). it tracks upstream `main` (pstack 0.15.25) and builds on [adjohn/pstack](https://github.com/adjohn/pstack), the first Claude Code port. [what's new](#whats-new-in-this-fork) lists what this fork adds, [ported from cursor](#ported-from-cursor) lists what moved, and [contributing](#contributing) says where to file issues and pull requests.
 
 the introduction below is adapted from poteto's original readme. only the cursor references changed.
 
@@ -15,6 +15,22 @@ there's a growing sense that ai writes too much slop code. i agree. i don't want
 **claude code gives you the best of all worlds.** every claude model tier has its strengths and weaknesses. use any model with pstack. in fact, many of my skills use multi-tier workflows to take advantage of each tier's unique strengths.
 
 fork it. improve it. make it yours. PRs are welcome! 
+
+## what's new in this fork
+
+- **synced to the latest upstream.** pstack 0.15.25 at `cursor/plugins` `main` (`99743e9`), up from 0.15.5. this includes upstream's rewrite of four principles as reasoning instead of rules.
+- **seven new skills, all ported to claude code:**
+  - [`/poteto-help`](./skills/poteto-help/SKILL.md): ask which skill or playbook fits, and get a prompt to type.
+  - [`/sharpen`](./skills/sharpen/SKILL.md): approach a task the way a top expert would before the work starts.
+  - [`/in-your-own-words`](./skills/in-your-own-words/SKILL.md): the agent restates your goal before it starts.
+  - [`/ketchup`](./skills/ketchup/SKILL.md): a short plain-language update on what changed since your last message, and what waits on you.
+  - [`/correct`](./skills/correct/SKILL.md): make the mistakes agents repeat in your repo impossible, with architecture, types, lint, and tests.
+  - [`/benchmark-checklist`](./skills/benchmark-checklist/SKILL.md): check a perf number before you report it.
+  - [explain-the-number](./skills/principle-explain-the-number/SKILL.md): a principle for any number you measured.
+- **model picks that fit claude code.** upstream tells agents to pick a reasoning level and a fast or standard speed per subagent, which are parts of a cursor model slug. the claude code `Agent` tool takes only a model, so this port picks a model tier for the job, and effort follows the session.
+- **more cursor text ported.** `readonly` subagents, cursor-only MCP discovery, cloud subagents, custom modes, `/visualize`, and cursor projects now map to claude code equivalents. the port script fails on these words, so a future sync can't bring them back.
+- **a sync that keeps the port's own edits.** the upstream merge runs against a ported copy of the old snapshot, so hand-made claude code changes survive. see [syncing with upstream](#syncing-with-upstream).
+- **kept from the earlier port:** the pr size gate, the watch-pr fixes, and `~/.claude` transcript lookup.
 
 ## ported from cursor
 
@@ -50,23 +66,33 @@ the port tracks upstream as a vendor branch so git carries the Claude Code chang
 from your shell:
 
 ```bash
-claude plugin marketplace add adjohn/pstack
+claude plugin marketplace add Ansh-Sonkusare/pstack
 claude plugin install pstack@pstack
 ```
 
 or from an interactive claude code session:
 
 ```text
-/plugin marketplace add adjohn/pstack
+/plugin marketplace add Ansh-Sonkusare/pstack
 /plugin install pstack@pstack
 ```
 
 `claude plugin list` shows `pstack@pstack` as enabled after the install.
 
+already have pstack from another marketplace, such as `adjohn/pstack`? both use the marketplace name `pstack`, so swap the source and reinstall:
+
+```bash
+claude plugin marketplace remove pstack
+claude plugin marketplace add Ansh-Sonkusare/pstack
+claude plugin install pstack@pstack
+```
+
+to update, run `claude plugin marketplace update pstack`, then `claude plugin update pstack@pstack`. when an upstream sync keeps the same version number, `update` reports that you're current, so run `claude plugin uninstall pstack@pstack && claude plugin install pstack@pstack` to pull the new files.
+
 or paste this into claude code and let it do the install:
 
 ```text
-install the pstack plugin from https://github.com/adjohn/pstack. run `claude plugin marketplace add adjohn/pstack`, then `claude plugin install pstack@pstack`, then `claude plugin list` to confirm. check that `node` and `gh` are on my PATH and tell me if either is missing. then tell me to restart claude code and run /setup-pstack.
+install the pstack plugin from https://github.com/Ansh-Sonkusare/pstack. run `claude plugin marketplace add Ansh-Sonkusare/pstack`, then `claude plugin install pstack@pstack`, then `claude plugin list` to confirm. check that `node` and `gh` are on my PATH and tell me if either is missing. then tell me to restart claude code and run /setup-pstack.
 ```
 
 prerequisites:
@@ -344,7 +370,11 @@ to set it up, point claude code at [`FOR_AGENTS.md`](./automations/benny/FOR_AGE
 
 ## contributing
 
-file [issues](https://github.com/adjohn/pstack/issues) and [pull requests](https://github.com/adjohn/pstack/pulls) at this fork. upstream lives at [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack). the `upstream-vendor` branch tracks it, and port changes go on `main` on top of it. an improvement that is not specific to claude code is welcome upstream too.
+file [issues](https://github.com/Ansh-Sonkusare/pstack/issues) and [pull requests](https://github.com/Ansh-Sonkusare/pstack/pulls) at this fork. the first claude code port is [adjohn/pstack](https://github.com/adjohn/pstack), and this fork sends its upstream syncs back there too. upstream lives at [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack). the `upstream-vendor` branch tracks it, and port changes go on `main` on top of it. an improvement that is not specific to claude code is welcome upstream too.
+
+## credits
+
+pstack is by [Lauren Tan](https://x.com/poteto) ([cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack)). the first claude code port is by [adjohn](https://github.com/adjohn/pstack). this fork is maintained by [@Ansh-Sonkusare](https://github.com/Ansh-Sonkusare).
 
 ## license
 
