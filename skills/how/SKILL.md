@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Explore the codebase to answer "how does X work?" questions. Produce architectural explanations at the level of a senior engineer onboarding onto a subsystem, enough to build a working mental model, not so much that it reads like annotated source code.
 
-Every spawn is a read-only subagent with `subagent_type: general-purpose`: its prompt forbids file writes and mutating commands. Explorers use the `how explorer` line in `~/.claude/pstack-models.md` (default `haiku`), and every explainer uses the `how explainer` line (default `opus`). Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a slug, use the default and say so. If it rejects the default, use the nearest Claude tier from its error message. Pick each subagent's reasoning level and fast or standard speed for the job, per the Subagents section of the **poteto-mode** skill.
+Every spawn is a read-only subagent with `subagent_type: general-purpose`: its prompt forbids file writes and mutating commands. Explorers use the `how explorer` line in `~/.claude/pstack-models.md` (default `haiku`), and every explainer uses the `how explainer` line (default `opus`). Set `model` to that line's value, or to the default if the file or the line is missing. Leave `model` unset when the value is `auto` or `inherit-parent`. If the Agent tool rejects a slug, use the default and say so. If it rejects the default, use the nearest Claude tier from its error message. Pick each subagent's model tier for the job, per the Subagents section of the **poteto-mode** skill.
 
 ## 1. Assess complexity
 

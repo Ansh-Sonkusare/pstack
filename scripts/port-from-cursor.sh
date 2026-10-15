@@ -209,13 +209,23 @@ my @rules = (
    "Say \"own worktree per attempt\", or run them as cloud sessions."],
   ["## Build a bot UI with `/make-bot-ui`\n\nOne situational skill is for Grok Bot users. [`/make-bot-ui`](../../skills/make-bot-ui/SKILL.md) builds a small page whose buttons wake a bot over a webhook routine. For example, you could swipe through a review queue and have each swipe ask the bot to act on that item. A server on your machine holds the webhook'"'"'s sender key, so the key never reaches the browser or the chat. The skill also covers exposing the page on Tailscale.\n\n",
    ""],
+
+  # per-spawn effort and fast-mode picks (Cursor slug suffixes) -> model tier per spawn
+  ["**Match the model to the job.** Before each spawn, start from the role'"'"'s line or default and pick the reasoning level and speed the job needs. The `/setup-pstack` budget sets each role'"'"'s starting level, xhigh by default. Raise it one step, up to max, for the hardest or subtlest work. Lower it one step for judgment and two or more steps for routine work. Use fast mode only when the job is urgent, meaning CI or trunk is red or a person is blocked on the result right now. Otherwise use standard speed, the same slug without `-fast`. Verification is the exception and stays on the `swarm workers` model and speed (`haiku` by default). Change only the effort level and whether the slug is fast, and keep the family the role names, so a diverse panel stays diverse. If the family has no slug at that level and speed, use its nearest slug. A role on `auto` or `inherit-parent` stays on the parent model. If the Agent tool rejects the adjusted slug, do not try another adjusted slug. Use the role'"'"'s line or default and say so.",
+   "**Match the model to the job.** Before each spawn, start from the role'"'"'s line or default. The `Agent` tool takes only a model, and reasoning effort follows the session (the `/setup-pstack` budget), so match the job by tier. Move a single-model role up one tier, such as `sonnet` to `opus`, only for the hardest or subtlest work, and keep routine work on the role'"'"'s model. Keep panel entries as configured, so a diverse panel stays diverse. Verification is the exception and stays on the `swarm workers` model (`haiku` by default). A role on `auto` or `inherit-parent` stays on the parent model. If the Agent tool rejects a model, use the role'"'"'s line or default and say so."],
+  ["Pick each subagent'"'"'s reasoning level and fast or standard speed for the job",
+   "Pick each subagent'"'"'s model tier for the job"],
+  ["Spawn `Task` with `subagent_type: \"pstack:comment-sicko\"`.",
+   "Spawn Comment Sicko with `Agent` (the subagent-launching tool) and `subagent_type: \"pstack:comment-sicko\"`."],
+  ["cloud-agent URL",
+   "cloud session URL"],
 );
 for my $r (@rules) { my ($from, $to) = @$r; s/\Q$from\E/$to/g; }
 s{re-read this playbook from trunk with `git show origin/main:pstack/([^`]+)`}{re-read this playbook from the installed pstack plugin (`cat \${CLAUDE_PLUGIN_ROOT}/$1`; the plugin install is the canonical copy, never a copy inside a work worktree)}g;
 s{`git show origin/main:pstack/([^`]+)`}{`cat \${CLAUDE_PLUGIN_ROOT}/$1`}g;
 '
 
-leftovers=$(grep -rnE --exclude-dir=node_modules 'environment: "|/deslop|\.mdc\b|AskQuestion|\bTask tool|grok-[0-9]|gpt-5|claude-[a-z]+-[0-9]|cursor-team-kit|cloud_base_branch' skills agents docs || true)
+leftovers=$(grep -rnE --exclude-dir=node_modules 'environment: "|/deslop|\.mdc\b|AskQuestion|\bTask tool|grok-[0-9]|gpt-5|claude-[a-z]+-[0-9]|cursor-team-kit|cloud_base_branch|`Task`|fast or standard speed|/visualize|Custom Mode' skills agents docs || true)
 if [ -n "$leftovers" ]; then
   printf 'Cursor-specific text the rules did not port:\n%s\n' "$leftovers" >&2
   exit 1
