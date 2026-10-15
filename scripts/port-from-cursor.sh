@@ -217,6 +217,8 @@ my @rules = (
    "Pick each subagent'"'"'s model tier for the job"],
   ["Spawn `Task` with `subagent_type: \"pstack:comment-sicko\"`.",
    "Spawn Comment Sicko with `Agent` (the subagent-launching tool) and `subagent_type: \"pstack:comment-sicko\"`."],
+  ["Reviewers return findings in the `Task` response body.",
+   "Reviewers return findings in the `Agent` response body."],
   ["cloud-agent URL",
    "cloud session URL"],
 );
